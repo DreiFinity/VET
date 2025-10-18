@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
 import axios from "axios";
 
+const VITE_API_BASE1 = import.meta.env.VITE_API_BASE;
+
 const Billing = () => {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -12,7 +14,7 @@ const Billing = () => {
   useEffect(() => {
     const fetchBillingData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/billing");
+        const response = await axios.get(`${VITE_API_BASE1}/api/billing`);
         setBillings(response.data);
       } catch (error) {
         console.error("Error fetching billing data:", error);
@@ -24,7 +26,7 @@ const Billing = () => {
   }, []);
   const fetchStats = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/stats");
+      const res = await axios.get(`${VITE_API_BASE}/api/stats`);
       setStats(res.data);
     } catch (err) {
       console.error("Error fetching stats:", err);
