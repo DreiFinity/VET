@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 
+const VITE_API_BASE1 = import.meta.env.VITE_API_BASE;
+
 export default function ChangePassword() {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -31,7 +33,7 @@ export default function ChangePassword() {
 
       // ✅ Call backend endpoint
       const response = await axios.put(
-        "http://localhost:5000/api/admin/update",
+        `${VITE_API_BASE1}/api/admin/update`,
         { oldPassword, password: newPassword },
         {
           headers: {
