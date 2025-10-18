@@ -4,6 +4,8 @@ import axios from "axios";
 
 import { useNavigate } from "react-router-dom";
 
+const VITE_API_BASE1 = import.meta.env.VITE_API_BASE;
+
 const Admin_Veterinaries = () => {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -30,7 +32,7 @@ const Admin_Veterinaries = () => {
 
   const fetchClinics = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/clinics");
+      const res = await axios.get(`${VITE_API_BASE1}/api/clinics`);
       setClinics(res.data);
     } catch (err) {
       console.error("Error fetching clinics:", err);
@@ -39,7 +41,7 @@ const Admin_Veterinaries = () => {
 
   const fetchStats = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/stats");
+      const res = await axios.get(`${VITE_API_BASE1}/api/stats`);
       setStats(res.data);
     } catch (err) {
       console.error("Error fetching stats:", err);
@@ -62,7 +64,7 @@ const Admin_Veterinaries = () => {
 
     try {
       await axios.put(
-        `http://localhost:5000/api/clinics/ban/${selectedClinic.owner_id}`,
+        `${VITE_API_BASE1}/api/clinics/ban/${selectedClinic.owner_id}`,
         { reason: banReason }
       );
 
