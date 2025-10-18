@@ -4,6 +4,8 @@ import axios from "axios";
 import Sidebar from "../components/Sidebar";
 import { useNavigate } from "react-router-dom";
 
+const VITE_API_BASE1 = import.meta.env.VITE_API_BASE;
+
 const Admin_PetOwners = () => {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -34,7 +36,7 @@ const Admin_PetOwners = () => {
   const fetchUsers = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/users/pet-owners".trim()
+        `${VITE_API_BASE}/api/users/pet-owners`.trim()
       );
 
       setUsers(res.data);
@@ -45,7 +47,7 @@ const Admin_PetOwners = () => {
   // ✅ Fetch stats from backend
   const fetchStats = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/stats");
+      const res = await axios.get(`${VITE_API_BASE1}/api/stats`);
       setStats(res.data);
     } catch (err) {
       console.error("Error fetching stats:", err);
@@ -71,7 +73,7 @@ const Admin_PetOwners = () => {
     }
     try {
       await axios.put(
-        `http://localhost:5000/api/users/ban/${selectedUser.user_id}`,
+        `${VITE_API_BASE1}/api/users/ban/${selectedUser.user_id}`,
         {
           reason: banReason,
         }
