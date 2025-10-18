@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaSearch } from "react-icons/fa";
-import { useNavigate } from "react-router-dom"; // ✅ Make sure this import exists
+import { useNavigate } from "react-router-dom";
+
+const VITE_API_BASE1 = import.meta.env.VITE_API_BASE;
 
 const Admin_BannedUsers = () => {
   const [users, setUsers] = useState([]);
@@ -29,7 +31,7 @@ const Admin_BannedUsers = () => {
 
   const fetchBannedUsers = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/users/banned");
+      const res = await axios.get(`${VITE_API_BASE1}/api/users/banned`);
       setUsers(res.data);
     } catch (err) {
       console.error("Error fetching banned users:", err);
@@ -38,7 +40,7 @@ const Admin_BannedUsers = () => {
 
   const fetchStats = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/stats");
+      const res = await axios.get(`${VITE_API_BASE1}/api/stats`);
       setStats(res.data);
     } catch (err) {
       console.error("Error fetching stats:", err);
@@ -57,7 +59,7 @@ const Admin_BannedUsers = () => {
 
   const handleUnban = async (userId) => {
     try {
-      await axios.put(`http://localhost:5000/api/users/unban/${userId}`);
+      await axios.put(`${VITE_API_BASE1}/api/users/unban/${userId}`);
       fetchBannedUsers();
     } catch (err) {
       console.error("Error unbanning user:", err);
@@ -127,7 +129,7 @@ const Admin_BannedUsers = () => {
               {stats.clinicsCount}
             </h2>
             <p className="text-sm sm:text-lg">Clinics</p>
-          </div> 
+          </div>
         </div>
       </div>
 
@@ -204,7 +206,7 @@ const Admin_BannedUsers = () => {
                   src={
                     selectedUserForReason.evidence_image.startsWith("http")
                       ? selectedUserForReason.evidence_image
-                      : `http://localhost:5000/${selectedUserForReason.evidence_image.replace(
+                      : `${VITE_API_BASE1}/${selectedUserForReason.evidence_image.replace(
                           /^\/+/,
                           ""
                         )}`
