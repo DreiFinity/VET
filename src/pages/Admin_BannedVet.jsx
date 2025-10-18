@@ -3,6 +3,8 @@ import { FaSearch } from "react-icons/fa";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+const VITE_API_BASE1 = import.meta.env.VITE_API_BASE;
+
 const Admin_BannedVet = () => {
   const [search, setSearch] = useState("");
   const [clinics, setClinics] = useState([]);
@@ -16,7 +18,7 @@ const Admin_BannedVet = () => {
 
   const fetchBannedClinics = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/clinics/banned");
+      const res = await axios.get(`${VITE_API_BASE1}/api/clinics/banned`);
       setClinics(res.data.data || res.data);
     } catch (err) {
       console.error(err);
@@ -26,7 +28,7 @@ const Admin_BannedVet = () => {
   const handleUnban = async (ownerId, name) => {
     if (!window.confirm(`Unban ${name}?`)) return;
     try {
-      await axios.put(`http://localhost:5000/api/clinics/unban/${ownerId}`);
+      await axios.put(`${VITE_API_BASE1}/api/clinics/unban/${ownerId}`);
       alert(`${name} has been unbanned.`);
       fetchBannedClinics();
     } catch (err) {
@@ -42,7 +44,7 @@ const Admin_BannedVet = () => {
 
   const fetchStats = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/stats");
+      const res = await axios.get(`${VITE_API_BASE1}/api/stats`);
       setStats(res.data);
     } catch (err) {
       console.error("Error fetching stats:", err);
