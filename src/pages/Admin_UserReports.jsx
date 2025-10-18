@@ -61,7 +61,7 @@ const Admin_UserReports = () => {
     evidence_image
   ) => {
     try {
-      const res = await axios.put(`${VITE_API_BASE}/api/user-reports/ban`, {
+      const res = await axios.put(`${VITE_API_BASE1}/api/user-reports/ban`, {
         reported_user_id,
         evidence_text,
         evidence_image,
