@@ -3,12 +3,12 @@ import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const VITE_API_BASE = import.meta.env.VITE_API_BASE;
+const VITE_API_BASE1 = import.meta.env.VITE_API_BASE;
 
 // ✅ Register admin function
 const registerAdmin = async (adminData) => {
   const response = await axios.post(
-    `${VITE_API_BASE}/api/admin/signup`,
+    `${VITE_API_BASE1}/api/admin/signup`,
     adminData
   );
   return response.data; // { admin, token, message }
