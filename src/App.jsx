@@ -37,7 +37,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* Non-admin routes */}
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<AdminLoginPage />} />
         <Route path="/messages" element={<Messages />} />
         <Route path="/schedule" element={<VetSchedule />} />
         <Route path="/subscription" element={<Subscription />} />

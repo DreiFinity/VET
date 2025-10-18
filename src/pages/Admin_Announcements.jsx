@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+const VITE_API_BASE = import.meta.env.VITE_API_BASE;
+
 const Admin_Announcements = () => {
   const [openCategory, setOpenCategory] = useState(false);
   const [openAudience, setOpenAudience] = useState(false);
@@ -46,7 +48,7 @@ const Admin_Announcements = () => {
   const targetAudiences = ["All Users", "Pet Owners", "Veterinarians", "Admin"];
   const drafts = ["Draft", "Published"];
   const priorities = ["Low", "Medium", "High"];
-  const API_BASE = "http://localhost:5000/api/announcements"; // adjust to your backend
+  const API_BASE = `${VITE_API_BASE}/api/announcements`; // adjust to your backend
 
   useEffect(() => {
     fetchAnnouncements();
