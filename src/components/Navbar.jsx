@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+const VITE_API_BASE1 = import.meta.env.VITE_API_BASE;
+
 const Navbar = () => {
   const [adminName, setAdminName] = useState("");
   const [announcements, setAnnouncements] = useState([]);
@@ -15,7 +17,7 @@ const Navbar = () => {
   const fetchAnnouncements = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/announcements/admin_announcements"
+        `${VITE_API_BASE1}/api/announcements/admin_announcements`
       );
       setAnnouncements(res.data);
     } catch (err) {
