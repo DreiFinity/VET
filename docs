@@ -1,0 +1,34 @@
+Appointments PAGE
+
+
+*
+HOW TO INSTALL REACT VITE
+npm create vite@4.1.0 or npm install vite@latest
+npm install
+npm run dev
+*
+
+*
+to install tailwind 
+npm install vite@latest
+npm install @tailwindcss/vite
+npm install tailwindcss @tailwindcss/vite
+
+go to vite.config.js:
+
+import tailwindcss from '@tailwindcss/vite'
+tailwindcss(),
+
+go to index.css:
+
+@import "tailwindcss";
+
+if not working install:
+npm install @vitejs/plugin-react@latest
+*
+
+
+*HOW TO INSTALL REACT NAVIGATION:
+
+npm install react-router-dom
+*
