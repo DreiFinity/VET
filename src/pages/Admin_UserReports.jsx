@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
 import axios from "axios";
 
+const VITE_API_BASE1 = import.meta.env.VITE_API_BASE;
+
 const Admin_UserReports = () => {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -17,7 +19,7 @@ const Admin_UserReports = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/user-reports/${role}`
+        `${VITE_API_BASE1}/api/user-reports/${role}`
       );
       setReports(response.data);
     } catch (error) {
@@ -43,7 +45,7 @@ const Admin_UserReports = () => {
 
   const fetchStats = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/stats");
+      const res = await axios.get(`${VITE_API_BASE1}:5000/api/stats`);
       setStats(res.data);
     } catch (err) {
       console.error("Error fetching stats:", err);
@@ -59,14 +61,11 @@ const Admin_UserReports = () => {
     evidence_image
   ) => {
     try {
-      const res = await axios.put(
-        `http://localhost:5000/api/user-reports/ban`,
-        {
-          reported_user_id,
-          evidence_text,
-          evidence_image,
-        }
-      );
+      const res = await axios.put(`${VITE_API_BASE}/api/user-reports/ban`, {
+        reported_user_id,
+        evidence_text,
+        evidence_image,
+      });
 
       alert(`Successfully banned ${reported_user_name}`);
 
