@@ -36,7 +36,7 @@ const Admin_PetOwners = () => {
   const fetchUsers = async () => {
     try {
       const res = await axios.get(
-        `${VITE_API_BASE}/api/users/pet-owners`.trim()
+        `${VITE_API_BASE1}/api/users/pet-owners`.trim()
       );
 
       setUsers(res.data);
