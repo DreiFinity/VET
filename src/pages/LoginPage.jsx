@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { signIn } from "../api/auth/SignIn";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState("");
