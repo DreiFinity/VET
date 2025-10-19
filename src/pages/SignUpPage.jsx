@@ -127,6 +127,13 @@ export default function SignUpPage() {
         >
           {loading ? "Creating..." : "Sign Up"}
         </button>
+
+        <p className="text-sm text-center mt-3 text-gray-700">
+          Already have an account?{" "}
+          <Link to="/" className="text-blue-600 hover:underline">
+            Go back to login
+          </Link>
+        </p>
         {error && <p className="text-red-500 text-sm">{error}</p>}
       </form>
     </div>
