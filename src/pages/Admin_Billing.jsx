@@ -26,7 +26,7 @@ const Billing = () => {
   }, []);
   const fetchStats = async () => {
     try {
-      const res = await axios.get(`${VITE_API_BASE}/api/stats`);
+      const res = await axios.get(`${VITE_API_BASE1}/api/stats`);
       setStats(res.data);
     } catch (err) {
       console.error("Error fetching stats:", err);
