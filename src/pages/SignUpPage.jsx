@@ -128,10 +128,12 @@ export default function SignUpPage() {
           {loading ? "Creating..." : "Sign Up"}
         </button>
 
-        {/* ✅ Link to Login page */}
-        <p className="text-sm text-center mt-3 text-gray-700">
-          Already have an account?{" "}
-          <Link to="/admin/login" className="text-blue-600 hover:underline">
+        <p className="text-md text-center mt-5">
+          <span className="text-gray-800">Already have an account?</span>{" "}
+          <Link
+            to="/admin/login"
+            className="text-blue-700 font-bold underline hover:text-blue-900"
+          >
             Go back to login
           </Link>
         </p>
