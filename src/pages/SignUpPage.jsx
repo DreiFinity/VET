@@ -130,7 +130,7 @@ export default function SignUpPage() {
 
         <p className="text-sm text-center mt-3 text-gray-700">
           Already have an account?{" "}
-          <Link to="/" className="text-blue-600 hover:underline">
+          <Link to="/admin/login" className="text-blue-600 hover:underline">
             Go back to login
           </Link>
         </p>
