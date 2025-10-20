@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { signIn } from "../api/auth/SignIn";
 
 export default function AdminLoginPage() {
@@ -84,6 +84,14 @@ export default function AdminLoginPage() {
           >
             Sign In
           </button>
+
+          {/* ✅ Link to Sign Up page */}
+          <p className="text-sm text-center mt-3 text-gray-700">
+            Don’t have an account?{" "}
+            <Link to="/signup" className="text-blue-600 hover:underline">
+              Sign up here
+            </Link>
+          </p>
         </form>
       </div>
     </div>
