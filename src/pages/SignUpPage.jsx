@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const VITE_API_BASE1 = import.meta.env.VITE_API_BASE;
@@ -128,12 +128,6 @@ export default function SignUpPage() {
           {loading ? "Creating..." : "Sign Up"}
         </button>
 
-        <p className="text-sm text-center mt-3 text-gray-700">
-          Already have an account?{" "}
-          <Link to="/admin/login" className="text-blue-600 hover:underline">
-            Go back to login
-          </Link>
-        </p>
         {error && <p className="text-red-500 text-sm">{error}</p>}
       </form>
     </div>

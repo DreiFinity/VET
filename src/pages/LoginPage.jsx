@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { signIn } from "../api/auth/SignIn";
-import { Link, useNavigate } from "react-router-dom";
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState("");
@@ -85,13 +84,6 @@ export default function AdminLoginPage() {
           >
             Sign In
           </button>
-
-          <p className="text-sm text-center mt-3 text-gray-700">
-            Don’t have an account?{" "}
-            <Link to="/signup" className="text-blue-600 hover:underline">
-              Sign up here
-            </Link>
-          </p>
         </form>
       </div>
     </div>
