@@ -246,7 +246,7 @@ const Admin_UserReports = () => {
 
       {/* Evidence Modal */}
       {modalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
           <div className="bg-white p-6 rounded-lg w-[90%] sm:w-[500px] relative">
             <h2 className="text-lg font-bold mb-4">Evidence</h2>
             <p className="mb-2">{modalContent.text}</p>
