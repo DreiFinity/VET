@@ -198,18 +198,19 @@ const Admin_BannedUsers = () => {
             </div>
 
             {/* Evidence Images */}
+            {/* Evidence Images */}
             <div className="mt-2">
               <p className="font-medium">Evidence Image:</p>
               {(() => {
                 let images = [];
 
-                if (bannedUser?.evidence_image) {
+                if (selectedUserForReason?.evidence_image) {
                   try {
-                    // Try to parse JSON (in case it's an array string)
-                    images = JSON.parse(bannedUser.evidence_image);
+                    // Try parsing JSON array (e.g., '["url1","url2"]')
+                    images = JSON.parse(selectedUserForReason.evidence_image);
                   } catch {
-                    // If it's not JSON, assume it’s a single URL
-                    images = [bannedUser.evidence_image];
+                    // Otherwise assume it's a single string URL
+                    images = [selectedUserForReason.evidence_image];
                   }
                 }
 
@@ -220,15 +221,19 @@ const Admin_BannedUsers = () => {
                         key={idx}
                         src={url}
                         alt={`Evidence ${idx + 1}`}
-                        className="w-24 h-24 object-cover rounded-lg border"
+                        className="w-24 h-24 object-cover rounded-lg border cursor-pointer hover:scale-105 transition-transform"
+                        onClick={() => window.open(url, "_blank")}
                       />
                     ))}
                   </div>
                 ) : (
-                  <p className="text-gray-500">No evidence image</p>
+                  <p className="text-gray-500 italic">
+                    No evidence image provided
+                  </p>
                 );
               })()}
             </div>
+
             <div className="flex justify-end">
               <button
                 className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition"
