@@ -198,51 +198,37 @@ const Admin_BannedUsers = () => {
             </div>
 
             {/* Evidence Images */}
-            <div className="mb-4">
-              <p className="text-gray-600 font-medium mb-1">
-                Evidence Image(s):
-              </p>
+            <div className="mt-2">
+              <p className="font-medium">Evidence Image:</p>
+              {(() => {
+                let images = [];
 
-              {selectedUserForReason.evidence_image ? (
-                (() => {
-                  let images = [];
+                if (bannedUser?.evidence_image) {
                   try {
-                    // Parse array or fallback to single string
-                    images = JSON.parse(selectedUserForReason.evidence_image);
-                    if (!Array.isArray(images))
-                      images = [selectedUserForReason.evidence_image];
+                    // Try to parse JSON (in case it's an array string)
+                    images = JSON.parse(bannedUser.evidence_image);
                   } catch {
-                    images = [selectedUserForReason.evidence_image];
+                    // If it's not JSON, assume it’s a single URL
+                    images = [bannedUser.evidence_image];
                   }
+                }
 
-                  return (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
-                      {images.map((img, i) => (
-                        <img
-                          key={i}
-                          src={
-                            img.startsWith("http")
-                              ? img
-                              : `${VITE_API_BASE1}/${img.replace(/^\/+/, "")}`
-                          }
-                          alt={`Evidence ${i + 1}`}
-                          className="w-full h-auto object-cover rounded-lg border border-gray-300 shadow-sm"
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = "/placeholder.png"; // fallback image
-                          }}
-                        />
-                      ))}
-                    </div>
-                  );
-                })()
-              ) : (
-                <p className="text-gray-500 italic">
-                  No evidence image provided.
-                </p>
-              )}
+                return images.length > 0 ? (
+                  <div className="flex flex-wrap gap-2 mt-1">
+                    {images.map((url, idx) => (
+                      <img
+                        key={idx}
+                        src={url}
+                        alt={`Evidence ${idx + 1}`}
+                        className="w-24 h-24 object-cover rounded-lg border"
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-500">No evidence image</p>
+                );
+              })()}
             </div>
-
             <div className="flex justify-end">
               <button
                 className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition"
