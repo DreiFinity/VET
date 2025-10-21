@@ -200,17 +200,38 @@ const Admin_BannedVet = () => {
             <p className="mb-4">{selectedClinic.ban_reason}</p>
 
             <div className="mb-4">
-              {selectedClinic.evidence_image ? (
-                <img
-                  src={selectedClinic.evidence_image}
-                  alt="Evidence"
-                  className="w-full h-auto object-cover rounded-lg border border-gray-300 shadow-sm"
-                />
-              ) : (
-                <p className="text-gray-500 italic">
-                  No evidence image provided.
-                </p>
-              )}
+              <p className="font-medium mb-1">Evidence Image:</p>
+              {(() => {
+                let images = [];
+
+                if (selectedClinic?.evidence_image) {
+                  try {
+                    // Try to parse JSON array (if it's like ["url1", "url2"])
+                    images = JSON.parse(selectedClinic.evidence_image);
+                  } catch {
+                    // If parsing fails, treat it as a single URL
+                    images = [selectedClinic.evidence_image];
+                  }
+                }
+
+                return images.length > 0 ? (
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {images.map((url, idx) => (
+                      <img
+                        key={idx}
+                        src={url}
+                        alt={`Evidence ${idx + 1}`}
+                        className="w-24 h-24 object-cover rounded-lg border border-gray-300 shadow-sm cursor-pointer hover:scale-105 transition-transform"
+                        onClick={() => window.open(url, "_blank")}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-500 italic">
+                    No evidence image provided.
+                  </p>
+                );
+              })()}
             </div>
 
             <div className="flex justify-end">
