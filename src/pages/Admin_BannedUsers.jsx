@@ -197,27 +197,45 @@ const Admin_BannedUsers = () => {
               </p>
             </div>
 
-            {/* Evidence Image */}
+            {/* Evidence Images */}
             <div className="mb-4">
-              <p className="text-gray-600 font-medium mb-1">Evidence Image:</p>
+              <p className="text-gray-600 font-medium mb-1">
+                Evidence Image(s):
+              </p>
 
               {selectedUserForReason.evidence_image ? (
-                <img
-                  src={
-                    selectedUserForReason.evidence_image.startsWith("http")
-                      ? selectedUserForReason.evidence_image
-                      : `${VITE_API_BASE1}/${selectedUserForReason.evidence_image.replace(
-                          /^\/+/,
-                          ""
-                        )}`
+                (() => {
+                  let images = [];
+                  try {
+                    // Parse array or fallback to single string
+                    images = JSON.parse(selectedUserForReason.evidence_image);
+                    if (!Array.isArray(images))
+                      images = [selectedUserForReason.evidence_image];
+                  } catch {
+                    images = [selectedUserForReason.evidence_image];
                   }
-                  alt="Evidence"
-                  className="w-full h-auto object-cover rounded-lg border border-gray-300 shadow-sm"
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = "/placeholder.png"; // fallback image
-                  }}
-                />
+
+                  return (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+                      {images.map((img, i) => (
+                        <img
+                          key={i}
+                          src={
+                            img.startsWith("http")
+                              ? img
+                              : `${VITE_API_BASE1}/${img.replace(/^\/+/, "")}`
+                          }
+                          alt={`Evidence ${i + 1}`}
+                          className="w-full h-auto object-cover rounded-lg border border-gray-300 shadow-sm"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "/placeholder.png"; // fallback image
+                          }}
+                        />
+                      ))}
+                    </div>
+                  );
+                })()
               ) : (
                 <p className="text-gray-500 italic">
                   No evidence image provided.
