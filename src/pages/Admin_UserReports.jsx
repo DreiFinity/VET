@@ -84,10 +84,17 @@ const Admin_UserReports = () => {
   };
 
   const handleShowEvidence = (text, image) => {
-    setModalContent({ text, image });
+    let parsedImage = image;
+    try {
+      if (typeof image === "string" && image.startsWith("[")) {
+        parsedImage = JSON.parse(image);
+      }
+    } catch (err) {
+      console.error("Error parsing image JSON:", err);
+    }
+    setModalContent({ text, image: parsedImage });
     setModalOpen(true);
   };
-
   const closeModal = () => setModalOpen(false);
 
   if (loading) return <p>Loading reports...</p>;
@@ -243,13 +250,34 @@ const Admin_UserReports = () => {
           <div className="bg-white p-6 rounded-lg w-[90%] sm:w-[500px] relative">
             <h2 className="text-lg font-bold mb-4">Evidence</h2>
             <p className="mb-2">{modalContent.text}</p>
-            {modalContent.image && (
-              <img
-                src={modalContent.image}
-                alt="Evidence"
-                className="w-full rounded"
-              />
-            )}
+            {modalContent.image &&
+              (Array.isArray(modalContent.image)
+                ? modalContent.image.map((img, idx) => (
+                    <img
+                      key={idx}
+                      src={img}
+                      alt={`Evidence ${idx + 1}`}
+                      className="w-full rounded mb-2"
+                    />
+                  ))
+                : typeof modalContent.image === "string" &&
+                  modalContent.image.startsWith("[")
+                ? JSON.parse(modalContent.image).map((img, idx) => (
+                    <img
+                      key={idx}
+                      src={img}
+                      alt={`Evidence ${idx + 1}`}
+                      className="w-full rounded mb-2"
+                    />
+                  ))
+                : modalContent.image && (
+                    <img
+                      src={modalContent.image}
+                      alt="Evidence"
+                      className="w-full rounded"
+                    />
+                  ))}
+
             <button
               onClick={closeModal}
               className="absolute top-2 right-2 bg-red-200 text-red-600 px-2 py-1 rounded-full"
