@@ -21,17 +21,19 @@ const Billing = () => {
       }
     };
 
+    const fetchStats = async () => {
+      try {
+        const res = await axios.get(`${VITE_API_BASE1}/api/stats`);
+        setStats(res.data);
+      } catch (err) {
+        console.error("Error fetching stats:", err);
+      }
+    };
+
     fetchBillingData();
     fetchStats();
   }, []);
-  const fetchStats = async () => {
-    try {
-      const res = await axios.get(`${VITE_API_BASE1}/api/stats`);
-      setStats(res.data);
-    } catch (err) {
-      console.error("Error fetching stats:", err);
-    }
-  };
+
   // 📅 Format date as "February 15, 2005"
   const formatDate = (dateString) => {
     if (!dateString) return "-";
