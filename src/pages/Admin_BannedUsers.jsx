@@ -110,6 +110,15 @@ const Admin_BannedUsers = () => {
                 >
                   Veterinaries
                 </li>
+                <li
+                  className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                  onClick={() => {
+                    navigate("/admin_bannedfreelance");
+                    setOpen(false);
+                  }}
+                >
+                  Freelance Vets
+                </li>
               </ul>
             </div>
           )}

@@ -32,6 +32,7 @@ import Settings_Clinic from "./components/Settings_ClinicDtls";
 import UpcomingAppointment from "./components/UpcomingAppointment";
 import Navbar from "./components/Navbar";
 import Admin_FreelanceVets from "./pages/Admin_Freelance";
+import Admin_BannedFreelance from "./pages/Admin_BannedFreelance";
 
 function App() {
   return (
@@ -107,6 +108,14 @@ function App() {
           element={
             <AdminLayout>
               <Admin_BannedVet />
+            </AdminLayout>
+          }
+        />
+        <Route
+          path="/admin_bannedfreelance"
+          element={
+            <AdminLayout>
+              <Admin_BannedFreelance />
             </AdminLayout>
           }
         />
