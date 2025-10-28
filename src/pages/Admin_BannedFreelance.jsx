@@ -46,6 +46,7 @@ const Admin_BannedFreelance = () => {
   const filteredVets = vets.filter((vet) =>
     vet.name.toLowerCase().includes(search.toLowerCase())
   );
+  const [unbanMessage, setUnbanMessage] = useState("");
 
   return (
     <div className="bg-white shadow-lg w-full mx-auto rounded-xl overflow-hidden border p-4 sm:p-6 border-gray-300">
