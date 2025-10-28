@@ -32,7 +32,7 @@ const Admin_BannedFreelance = () => {
 
   const handleUnban = async (vetId) => {
     try {
-      await axios.put(`${VITE_API_BASE1}/api/vets/${vetId}/unban`);
+      await axios.put(`${VITE_API_BASE1}/api/vets/unban/${vetId}`);
       fetchBannedVets();
     } catch (err) {
       console.error("Error unbanning vet:", err);
