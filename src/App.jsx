@@ -31,7 +31,7 @@ import Settings_ClincDetails_Pt1 from "./components/Settings_ClincDetails_Pt1";
 import Settings_Clinic from "./components/Settings_ClinicDtls";
 import UpcomingAppointment from "./components/UpcomingAppointment";
 import Navbar from "./components/Navbar";
-import Admin_FreelanceVets from "./pages/Admin_FreelanceVet";
+import Admin_FreelanceVets from "./pages/Admin_Freelance";
 
 function App() {
   return (
