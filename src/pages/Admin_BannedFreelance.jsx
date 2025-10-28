@@ -24,6 +24,7 @@ const Admin_BannedFreelance = () => {
   const fetchBannedVets = async () => {
     try {
       const res = await axios.get(`${VITE_API_BASE1}/api/vets/banned`);
+
       setVets(res.data);
     } catch (err) {
       console.error("Error fetching banned freelance vets:", err);
@@ -33,9 +34,12 @@ const Admin_BannedFreelance = () => {
   const handleUnban = async (vetId) => {
     try {
       await axios.put(`${VITE_API_BASE1}/api/vets/unban/${vetId}`);
+      setUnbanMessage("Vet has been successfully unbanned ✅");
       fetchBannedVets();
     } catch (err) {
       console.error("Error unbanning vet:", err);
+      setUnbanMessage("❌ Failed to unban vet. Please try again.");
+      setTimeout(() => setUnbanMessage(""), 3000);
     }
   };
 
@@ -47,6 +51,11 @@ const Admin_BannedFreelance = () => {
     <div className="bg-white shadow-lg w-full mx-auto rounded-xl overflow-hidden border p-4 sm:p-6 border-gray-300">
       {/* Top Section */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-10 mb-6">
+        {unbanMessage && (
+          <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-800 rounded-lg text-center font-medium">
+            {unbanMessage}
+          </div>
+        )}
         {/* Search Bar */}
         <div className="flex items-center w-full sm:w-[562px] h-[42px] sm:h-[46px] bg-[#D9D9D9] rounded-full px-3 sm:px-4 py-2 shadow-md mb-4 sm:mb-8">
           <input
