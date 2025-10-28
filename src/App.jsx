@@ -31,6 +31,7 @@ import Settings_ClincDetails_Pt1 from "./components/Settings_ClincDetails_Pt1";
 import Settings_Clinic from "./components/Settings_ClinicDtls";
 import UpcomingAppointment from "./components/UpcomingAppointment";
 import Navbar from "./components/Navbar";
+import Admin_FreelanceVets from "./pages/Admin_FreelanceVet";
 
 function App() {
   return (
@@ -74,6 +75,7 @@ function App() {
             </AdminLayout>
           }
         />
+
         <Route
           path="/admin_veterinaries"
           element={
@@ -82,6 +84,15 @@ function App() {
             </AdminLayout>
           }
         />
+        <Route
+          path="/admin_freelance"
+          element={
+            <AdminLayout>
+              <Admin_FreelanceVets />
+            </AdminLayout>
+          }
+        />
+
         <Route
           path="/admin_bannedusers"
           element={

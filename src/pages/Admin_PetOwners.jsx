@@ -133,6 +133,15 @@ const Admin_PetOwners = () => {
                 >
                   Veterinaries
                 </li>
+                <li
+                  className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                  onClick={() => {
+                    navigate("/admin_freelance"); // navigate inside AdminLayout
+                    setOpen(false); // close the dropdown
+                  }}
+                >
+                  Freelance Vets
+                </li>
               </ul>
             </div>
           )}
