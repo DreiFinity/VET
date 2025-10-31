@@ -23,6 +23,7 @@ const Admin_Announcements = () => {
     1: "Pet Owners",
     2: "Veterinarians",
     3: "Admin",
+    4: "Freelancers",
     null: "All Users", // in case the role is null
   };
 
@@ -31,11 +32,13 @@ const Admin_Announcements = () => {
     "Pet Owners": "client",
     Veterinarians: "clinic_owner",
     Admin: "admin",
+    Freelancers: "veterinarian",
   };
   const backendToDisplay = {
     client: "Pet Owners",
     clinic_owner: "Veterinarians",
     admin: "Admin",
+    veterinarian: "Freelancers",
     null: "All Users",
   };
   const categories = [
@@ -45,7 +48,13 @@ const Admin_Announcements = () => {
     "Policy Update",
     "Event",
   ];
-  const targetAudiences = ["All Users", "Pet Owners", "Veterinarians", "Admin"];
+  const targetAudiences = [
+    "All Users",
+    "Pet Owners",
+    "Veterinarians",
+    "Admin",
+    "Freelancers",
+  ];
   const drafts = ["Draft", "Published"];
   const priorities = ["Low", "Medium", "High"];
   const API_BASE = `${VITE_API_BASE}/api/announcements`; // adjust to your backend
