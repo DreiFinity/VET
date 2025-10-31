@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const VITE_API_BASE = import.meta.env.VITE_API_BASE;
 
 const Admin_Announcements = () => {
+  // States
   const [openCategory, setOpenCategory] = useState(false);
   const [openAudience, setOpenAudience] = useState(false);
   const [openDraft, setOpenDraft] = useState(false);
@@ -15,7 +16,10 @@ const Admin_Announcements = () => {
   const [content, setContent] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [announcements, setAnnouncements] = useState([]);
+  const [editingAnnouncement, setEditingAnnouncement] = useState(null);
 
+  // Dropdown data
   const categories = [
     "General",
     "Maintenance",
@@ -24,7 +28,6 @@ const Admin_Announcements = () => {
     "Event",
   ];
 
-  // ✅ Correct mapping for your backend
   const targetAudiences = [
     { label: "All Users", value: "null" },
     { label: "Pet Owners", value: "client" },
@@ -35,6 +38,21 @@ const Admin_Announcements = () => {
 
   const drafts = ["Draft", "Published"];
 
+  // Load announcements on mount
+  useEffect(() => {
+    fetchAnnouncements();
+  }, []);
+
+  const fetchAnnouncements = async () => {
+    try {
+      const res = await axios.get(`${VITE_API_BASE}/api/announcements`);
+      setAnnouncements(res.data);
+    } catch (error) {
+      console.error("❌ Failed to load announcements:", error);
+    }
+  };
+
+  // Create new announcement
   const handlePublish = async () => {
     if (!title || !content || !category || !targetAudience || !draft) {
       alert("Please fill out all required fields!");
@@ -53,24 +71,71 @@ const Admin_Announcements = () => {
         end_datetime: endDate || null,
       });
 
-      console.log("✅ Announcement created:", res.data);
-      alert("Announcement published successfully!");
-
-      // Reset form
-      setTitle("");
-      setContent("");
-      setCategory("");
-      setPriority("");
-      setDraft("");
-      setTargetAudience("");
-      setStartDate("");
-      setEndDate("");
+      alert("✅ Announcement published successfully!");
+      handleClear();
+      fetchAnnouncements();
     } catch (error) {
       console.error("❌ Failed to create announcement:", error);
-      alert("Error creating announcement. Please check your backend.");
+      alert("Error creating announcement.");
     }
   };
 
+  // Edit
+  const handleEdit = (announcement) => {
+    setEditingAnnouncement(announcement);
+    setTitle(announcement.title);
+    setContent(announcement.content);
+    setCategory(announcement.category);
+    setPriority(announcement.priority);
+    setDraft(announcement.status);
+    setTargetAudience(announcement.target_role_id || "null");
+    setStartDate(announcement.start_datetime?.slice(0, 16) || "");
+    setEndDate(announcement.end_datetime?.slice(0, 16) || "");
+  };
+
+  const handleUpdate = async () => {
+    if (!editingAnnouncement) return;
+
+    try {
+      await axios.put(
+        `${VITE_API_BASE}/api/announcements/${editingAnnouncement.announcement_id}`,
+        {
+          title,
+          content,
+          category,
+          priority,
+          status: draft,
+          targetAudience: targetAudience === "null" ? null : targetAudience,
+          start_datetime: startDate || null,
+          end_datetime: endDate || null,
+        }
+      );
+
+      alert("✅ Announcement updated!");
+      handleClear();
+      setEditingAnnouncement(null);
+      fetchAnnouncements();
+    } catch (error) {
+      console.error("❌ Failed to update announcement:", error);
+      alert("Error updating announcement.");
+    }
+  };
+
+  // Delete
+  const handleDelete = async (id) => {
+    if (!confirm("Are you sure you want to delete this announcement?")) return;
+
+    try {
+      await axios.delete(`${VITE_API_BASE}/api/announcements/${id}`);
+      alert("🗑️ Announcement deleted!");
+      fetchAnnouncements();
+    } catch (error) {
+      console.error("❌ Failed to delete announcement:", error);
+      alert("Error deleting announcement.");
+    }
+  };
+
+  // Clear form
   const handleClear = () => {
     setTitle("");
     setContent("");
@@ -88,14 +153,16 @@ const Admin_Announcements = () => {
         Announcements
       </label>
 
+      {/* === CREATE / EDIT FORM === */}
       <div className="bg-white min-h-[500px] p-6 sm:p-8">
         <label className="font-bold justify-start text-2xl mb-6 block">
-          Create New Announcement
+          {editingAnnouncement
+            ? "Edit Announcement"
+            : "Create New Announcement"}
         </label>
 
         {/* Title + Category */}
         <div className="flex flex-col sm:flex-row mt-6 gap-6">
-          {/* Title */}
           <div className="flex flex-col flex-1">
             <label htmlFor="title" className="mb-1">
               Title *
@@ -276,12 +343,81 @@ const Admin_Announcements = () => {
           >
             Clear
           </button>
-          <button
-            onClick={handlePublish}
-            className="w-full sm:w-48 h-10 bg-blue-500 px-4 py-2 rounded-md text-white"
-          >
-            Publish Announcement
-          </button>
+          {editingAnnouncement ? (
+            <button
+              onClick={handleUpdate}
+              className="w-full sm:w-48 h-10 bg-green-600 px-4 py-2 rounded-md text-white"
+            >
+              Update Announcement
+            </button>
+          ) : (
+            <button
+              onClick={handlePublish}
+              className="w-full sm:w-48 h-10 bg-blue-500 px-4 py-2 rounded-md text-white"
+            >
+              Publish Announcement
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* === DISPLAY TABLE === */}
+      <div className="bg-white mt-8 p-6 rounded-md shadow-sm border border-gray-300">
+        <h2 className="font-bold text-xl mb-4">All Announcements</h2>
+        <div className="overflow-x-auto">
+          <table className="min-w-full text-sm border-collapse border border-gray-200">
+            <thead className="bg-gray-100 border-b border-gray-200">
+              <tr>
+                <th className="text-left px-3 py-2">Title</th>
+                <th className="text-left px-3 py-2">Category</th>
+                <th className="text-left px-3 py-2">Status</th>
+                <th className="text-left px-3 py-2">Priority</th>
+                <th className="text-left px-3 py-2">Target</th>
+                <th className="text-left px-3 py-2">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {announcements.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan="6"
+                    className="text-center py-4 text-gray-500 italic"
+                  >
+                    No announcements found.
+                  </td>
+                </tr>
+              ) : (
+                announcements.map((a) => (
+                  <tr
+                    key={a.announcement_id}
+                    className="border-b border-gray-200 hover:bg-gray-50"
+                  >
+                    <td className="px-3 py-2">{a.title}</td>
+                    <td className="px-3 py-2">{a.category}</td>
+                    <td className="px-3 py-2">{a.status}</td>
+                    <td className="px-3 py-2 capitalize">{a.priority}</td>
+                    <td className="px-3 py-2">
+                      {a.target_role_id || "All Users"}
+                    </td>
+                    <td className="px-3 py-2 flex gap-2">
+                      <button
+                        onClick={() => handleEdit(a)}
+                        className="text-blue-600 hover:underline"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(a.announcement_id)}
+                        className="text-red-600 hover:underline"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
