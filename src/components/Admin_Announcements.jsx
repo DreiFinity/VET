@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import axios from "axios";
+
+const VITE_API_BASE = import.meta.env.VITE_API_BASE;
 
 const Admin_Announcements = () => {
   const [openCategory, setOpenCategory] = useState(false);
@@ -7,6 +10,11 @@ const Admin_Announcements = () => {
   const [category, setCategory] = useState("");
   const [targetAudience, setTargetAudience] = useState("");
   const [draft, setDraft] = useState("");
+  const [priority, setPriority] = useState("");
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   const categories = [
     "General",
@@ -15,8 +23,62 @@ const Admin_Announcements = () => {
     "Policy Update",
     "Event",
   ];
-  const targetAudiences = ["All Users", "Pet Owners", "Veterinarians"];
+
+  const targetAudiences = [
+    "All Users",
+    "Pet Owners",
+    "Clinic Owners",
+    "Veterinarians",
+  ];
+
   const drafts = ["Draft", "Published"];
+
+  const handlePublish = async () => {
+    if (!title || !content || !category || !targetAudience || !draft) {
+      alert("Please fill out all required fields!");
+      return;
+    }
+
+    try {
+      const res = await axios.post(`${VITE_API_BASE}/api/announcements`, {
+        title,
+        content,
+        category,
+        priority,
+        status: draft,
+        targetAudience,
+        start_datetime: startDate || null,
+        end_datetime: endDate || null,
+      });
+
+      console.log("✅ Announcement created:", res.data);
+      alert("Announcement published successfully!");
+
+      // Reset form
+      setTitle("");
+      setContent("");
+      setCategory("");
+      setPriority("");
+      setDraft("");
+      setTargetAudience("");
+      setStartDate("");
+      setEndDate("");
+    } catch (error) {
+      console.error("❌ Failed to create announcement:", error);
+      alert("Error creating announcement. Please check your backend.");
+    }
+  };
+
+  const handleClear = () => {
+    setTitle("");
+    setContent("");
+    setCategory("");
+    setPriority("");
+    setDraft("");
+    setTargetAudience("");
+    setStartDate("");
+    setEndDate("");
+  };
 
   return (
     <div className="bg-[#f6f6f6] shadow-lg w-full max-w-[1100px] mx-auto rounded-xl overflow-hidden border border-gray-300 p-4 sm:p-6">
@@ -39,6 +101,8 @@ const Admin_Announcements = () => {
             <input
               id="title"
               type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
               placeholder="Enter announcement title"
               className="w-full h-10 px-4 border-gray-300 border rounded-md"
             />
@@ -80,6 +144,8 @@ const Admin_Announcements = () => {
         <div>
           <textarea
             placeholder="Enter your announcement content here..."
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
             className="w-full h-64 p-4 border border-gray-300 rounded-md mt-6 text-left align-top resize-none"
           />
         </div>
@@ -93,6 +159,8 @@ const Admin_Announcements = () => {
             <input
               id="startDate"
               type="datetime-local"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
               className="w-full border border-gray-300 rounded-md px-3 py-2"
             />
           </div>
@@ -103,6 +171,8 @@ const Admin_Announcements = () => {
             <input
               id="endDate"
               type="datetime-local"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
               className="w-full border border-gray-300 rounded-md px-3 py-2"
             />
           </div>
@@ -118,6 +188,8 @@ const Admin_Announcements = () => {
                   type="radio"
                   name="priority"
                   value={p.toLowerCase()}
+                  checked={priority === p.toLowerCase()}
+                  onChange={(e) => setPriority(e.target.value)}
                   className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
                 />
                 <span>{p}</span>
@@ -193,72 +265,18 @@ const Admin_Announcements = () => {
 
         {/* Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-0 sm:justify-end items-center sm:space-x-4">
-          <button className="w-full sm:w-20 h-10 bg-gray-500 px-4 py-2 rounded-md text-white">
+          <button
+            onClick={handleClear}
+            className="w-full sm:w-20 h-10 bg-gray-500 px-4 py-2 rounded-md text-white"
+          >
             Clear
           </button>
-          <button className="w-full sm:w-48 h-10 bg-blue-500 px-4 py-2 rounded-md text-white">
+          <button
+            onClick={handlePublish}
+            className="w-full sm:w-48 h-10 bg-blue-500 px-4 py-2 rounded-md text-white"
+          >
             Publish Announcement
           </button>
-        </div>
-      </div>
-
-      {/* Recent Announcements */}
-      <div className="bg-white min-h-[400px] p-6 sm:p-8 mt-10">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 border-b border-gray-300 pb-8 gap-4">
-          <div>
-            <label className="font-medium text-xl">Recent Announcements</label>
-          </div>
-          <div className="relative w-full sm:w-80">
-            <input
-              type="text"
-              className="bg-white border border-gray-300 pl-5 pr-2 py-2 rounded-md w-full"
-              placeholder="Search announcements..."
-            />
-            <img
-              src="/search.png"
-              alt="Search Icon"
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5"
-            />
-          </div>
-        </div>
-
-        <div className="flex flex-col sm:flex-row w-full justify-between gap-6">
-          <div className="flex flex-col flex-1">
-            <div className="flex flex-row justify-between items-center w-full">
-              <label className="font-medium text-lg">
-                System Maintenance Scheduled
-              </label>
-            </div>
-
-            <div className="flex flex-wrap gap-3 mt-2 items-center">
-              <label>Jan 15,2025 - 10:30AM</label>
-              <button className="bg-red-300 px-3 py-2 text-sm rounded-full">
-                HIGH
-              </button>
-              <button className="bg-gray-300 px-3 py-2 text-sm rounded-full">
-                Scheduled
-              </button>
-              <label className="text-sm">General - All Users</label>
-            </div>
-
-            <div className="mt-2">
-              <label>
-                We will be performing scheduled maintenance on our servers from
-                2:00AM to 4:00AM EST. During this time, some services may be
-                temporarily unavailable.
-              </label>
-            </div>
-          </div>
-
-          {/* Right side buttons */}
-          <div className="flex flex-row sm:flex-row gap-3 sm:space-x-0 sm:space-y-3">
-            <button className="bg-gray-500 px-4 py-2 text-sm w-full sm:w-28 h-10 rounded-full text-white">
-              Edit
-            </button>
-            <button className="bg-red-500 px-4 py-2 text-sm w-full sm:w-28 h-10 rounded-full text-white">
-              Delete
-            </button>
-          </div>
         </div>
       </div>
     </div>
