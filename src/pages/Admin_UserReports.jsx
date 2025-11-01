@@ -122,15 +122,7 @@ const Admin_UserReports = () => {
             className="flex items-center justify-between w-36 sm:w-40 px-3 py-1 border border-gray-400 rounded-md shadow-sm bg-white text-xs sm:text-sm font-medium"
           >
             <span>
-              <span>
-                {selectedRole === "client"
-                  ? "Pet Owners"
-                  : selectedRole === "clinic_owner"
-                  ? "Clinic Owners"
-                  : selectedRole === "veterinarian"
-                  ? "Veterinarians"
-                  : "Unknown Role"}
-              </span>
+              {selectedRole === "client" ? "Pet Owners" : "Clinic Owners"}
             </span>
             <span>
               <img src="./dropdown.png" alt="Dropdown" className="w-3 sm:w-4" />
@@ -157,15 +149,6 @@ const Admin_UserReports = () => {
                   }}
                 >
                   Clinic Owners
-                </li>
-                <li
-                  className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => {
-                    setSelectedRole("veterinarian");
-                    setOpen(false);
-                  }}
-                >
-                  Veterinaries
                 </li>
               </ul>
             </div>
