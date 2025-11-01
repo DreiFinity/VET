@@ -87,7 +87,7 @@ const Admin_Freelance = () => {
             onClick={() => setOpen(!open)}
             className="flex items-center justify-between w-36 sm:w-40 px-3 py-1 border border-gray-400 rounded-md shadow-sm bg-white text-xs sm:text-sm font-medium"
           >
-            <span>Freelance Vets</span>
+            <span>Veterinarians</span>
             <img src="./dropdown.png" alt="Dropdown" className="w-3 sm:w-4" />
           </button>
 
