@@ -128,6 +128,7 @@ const Admin_Freelance = () => {
               <th className="px-4 py-2">Position</th>
               <th className="px-4 py-2">Department</th>
               <th className="px-4 py-2">Email</th>
+              <th className="px-4 py-2">Employment Type</th>
               <th className="px-4 py-2">Status</th>
               <th className="px-4 py-2">Action</th>
             </tr>
@@ -140,6 +141,7 @@ const Admin_Freelance = () => {
                 <td className="px-4 py-2">{v.position}</td>
                 <td className="px-4 py-2">{v.department}</td>
                 <td className="px-4 py-2 text-blue-600 underline">{v.email}</td>
+                <td className="px-4 py-2">{v.employment_type}</td>
                 <td className="px-4 py-2">
                   {v.is_banned ? "Banned" : "Active"}
                 </td>
