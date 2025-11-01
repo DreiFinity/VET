@@ -9,7 +9,7 @@ const Admin_UserReports = () => {
   const [search, setSearch] = useState("");
   const [reports, setReports] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalContent, setModalContent] = useState({ text: "", image: "" });
+  const [modalContent, setModalContent] = useState({ text: "", images: [] });
   const [loading, setLoading] = useState(true);
   const [selectedRole, setSelectedRole] = useState("client"); // Default: Pet Owners
   const [stats, setStats] = useState({ petOwnersCount: 0, clinicsCount: 0 });
@@ -29,6 +29,15 @@ const Admin_UserReports = () => {
     }
   };
 
+  const fetchStats = async () => {
+    try {
+      const res = await axios.get(`${VITE_API_BASE1}/api/stats`);
+      setStats(res.data);
+    } catch (err) {
+      console.error("Error fetching stats:", err);
+    }
+  };
+
   useEffect(() => {
     fetchReports(selectedRole);
     fetchStats();
@@ -43,16 +52,7 @@ const Admin_UserReports = () => {
       r.reporter_user_id.toString().includes(search)
   );
 
-  const fetchStats = async () => {
-    try {
-      const res = await axios.get(`${VITE_API_BASE1}/api/stats`);
-      setStats(res.data);
-    } catch (err) {
-      console.error("Error fetching stats:", err);
-    }
-  };
-
-  // ✅ Ban user handler (passes evidence text and image)
+  // Ban user handler
   const handleBan = async (
     report_id,
     reported_user_name,
@@ -61,15 +61,17 @@ const Admin_UserReports = () => {
     evidence_image
   ) => {
     try {
-      const res = await axios.put(`${VITE_API_BASE1}/api/user-reports/ban`, {
+      await axios.put(`${VITE_API_BASE1}/api/user-reports/ban`, {
         reported_user_id,
         evidence_text,
-        evidence_image,
+        evidence_image: Array.isArray(evidence_image)
+          ? evidence_image
+          : [evidence_image],
       });
 
       alert(`Successfully banned ${reported_user_name}`);
 
-      // ✅ Update UI instantly
+      // Update UI instantly
       setReports((prev) =>
         prev.map((r) =>
           r.reported_user_id === reported_user_id
@@ -83,22 +85,23 @@ const Admin_UserReports = () => {
     }
   };
 
+  // Show evidence modal
   const handleShowEvidence = (text, image) => {
-    let parsedImage = [];
+    let imagesArray = [];
 
     if (Array.isArray(image)) {
-      parsedImage = image;
+      imagesArray = image;
     } else if (typeof image === "string" && image.startsWith("[")) {
       try {
-        parsedImage = JSON.parse(image);
+        imagesArray = JSON.parse(image);
       } catch (err) {
         console.error("Failed to parse evidence_image:", err);
       }
     } else if (image) {
-      parsedImage = [image];
+      imagesArray = [image];
     }
 
-    setModalContent({ text, image: parsedImage });
+    setModalContent({ text, images: imagesArray });
     setModalOpen(true);
   };
 
@@ -129,19 +132,15 @@ const Admin_UserReports = () => {
             className="flex items-center justify-between w-36 sm:w-40 px-3 py-1 border border-gray-400 rounded-md shadow-sm bg-white text-xs sm:text-sm font-medium"
           >
             <span>
-              <span>
-                {selectedRole === "client"
-                  ? "Pet Owners"
-                  : selectedRole === "clinic_owner"
-                  ? "Clinic Owners"
-                  : selectedRole === "veterinarian"
-                  ? "Veterinarians"
-                  : "Unknown Role"}
-              </span>
+              {selectedRole === "client"
+                ? "Pet Owners"
+                : selectedRole === "clinic_owner"
+                ? "Clinic Owners"
+                : selectedRole === "veterinarian"
+                ? "Veterinarians"
+                : "Unknown Role"}
             </span>
-            <span>
-              <img src="./dropdown.png" alt="Dropdown" className="w-3 sm:w-4" />
-            </span>
+            <img src="./dropdown.png" alt="Dropdown" className="w-3 sm:w-4" />
           </button>
 
           {open && (
@@ -179,6 +178,7 @@ const Admin_UserReports = () => {
           )}
         </div>
 
+        {/* Stats */}
         <div className="flex space-x-4 sm:space-x-6 justify-center">
           <div className="bg-gray-300 px-3 sm:px-4 py-2 w-32 sm:w-40 rounded-[16px] sm:rounded-[20px] text-center">
             <h2 className="text-lg sm:text-xl font-bold">
@@ -212,10 +212,14 @@ const Admin_UserReports = () => {
           </thead>
 
           <tbody>
-            {filteredReports.map((report, index) => (
+            {filteredReports.map((report) => (
               <tr
-                key={index}
-                className={index % 2 === 0 ? "bg-[#D9D9D9]" : "bg-white"}
+                key={report.report_id}
+                className={
+                  filteredReports.indexOf(report) % 2 === 0
+                    ? "bg-[#D9D9D9]"
+                    : "bg-white"
+                }
               >
                 <td className="px-4 py-2">{report.reported_user_name}</td>
                 <td className="px-4 py-2">{report.reported_user_id}</td>
@@ -274,34 +278,15 @@ const Admin_UserReports = () => {
           <div className="bg-white p-6 rounded-lg w-[90%] sm:w-[500px] relative">
             <h2 className="text-lg font-bold mb-4">Evidence</h2>
             <p className="mb-2">{modalContent.text}</p>
-            {modalContent.image &&
-              (Array.isArray(modalContent.image)
-                ? modalContent.image.map((img, idx) => (
-                    <img
-                      key={idx}
-                      src={img}
-                      alt={`Evidence ${idx + 1}`}
-                      className="w-full rounded mb-2"
-                    />
-                  ))
-                : typeof modalContent.image === "string" &&
-                  modalContent.image.startsWith("[")
-                ? JSON.parse(modalContent.image).map((img, idx) => (
-                    <img
-                      key={idx}
-                      src={img}
-                      alt={`Evidence ${idx + 1}`}
-                      className="w-full rounded mb-2"
-                    />
-                  ))
-                : modalContent.image && (
-                    <img
-                      src={modalContent.image}
-                      alt="Evidence"
-                      className="w-full rounded"
-                    />
-                  ))}
-
+            {modalContent.images.length > 0 &&
+              modalContent.images.map((img, idx) => (
+                <img
+                  key={idx}
+                  src={img}
+                  alt={`Evidence ${idx + 1}`}
+                  className="w-full rounded mb-2"
+                />
+              ))}
             <button
               onClick={closeModal}
               className="absolute top-2 right-2 bg-red-200 text-red-600 px-2 py-1 rounded-full"
