@@ -84,17 +84,23 @@ const Admin_UserReports = () => {
   };
 
   const handleShowEvidence = (text, image) => {
-    let parsedImage = image;
-    try {
-      if (typeof image === "string" && image.startsWith("[")) {
-        parsedImage = JSON.parse(image);
+    let parsedImage = [];
+
+    if (Array.isArray(image)) {
+      parsedImage = image;
+    } else if (typeof image === "string" && image.trim() !== "") {
+      try {
+        const temp = JSON.parse(image);
+        parsedImage = Array.isArray(temp) ? temp : [temp];
+      } catch {
+        parsedImage = [image]; // fallback if JSON.parse fails
       }
-    } catch (err) {
-      console.error("Error parsing image JSON:", err);
     }
+
     setModalContent({ text, image: parsedImage });
     setModalOpen(true);
   };
+
   const closeModal = () => setModalOpen(false);
 
   if (loading) return <p>Loading reports...</p>;
@@ -122,7 +128,15 @@ const Admin_UserReports = () => {
             className="flex items-center justify-between w-36 sm:w-40 px-3 py-1 border border-gray-400 rounded-md shadow-sm bg-white text-xs sm:text-sm font-medium"
           >
             <span>
-              {selectedRole === "client" ? "Pet Owners" : "Clinic Owners"}
+              <span>
+                {selectedRole === "client"
+                  ? "Pet Owners"
+                  : selectedRole === "clinic_owner"
+                  ? "Clinic Owners"
+                  : selectedRole === "veterinarian"
+                  ? "Veterinarians"
+                  : "Unknown Role"}
+              </span>
             </span>
             <span>
               <img src="./dropdown.png" alt="Dropdown" className="w-3 sm:w-4" />
@@ -149,6 +163,15 @@ const Admin_UserReports = () => {
                   }}
                 >
                   Clinic Owners
+                </li>
+                <li
+                  className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                  onClick={() => {
+                    setSelectedRole("veterinarian");
+                    setOpen(false);
+                  }}
+                >
+                  Veterinarians
                 </li>
               </ul>
             </div>
