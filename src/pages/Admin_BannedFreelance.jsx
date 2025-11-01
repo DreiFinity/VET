@@ -141,18 +141,7 @@ const Admin_BannedFreelance = () => {
                     View
                   </button>
                 </td>
-                <td className="px-4 py-2">
-                  {vet.evidence_image ? (
-                    <button
-                      onClick={() => window.open(vet.evidence_image, "_blank")}
-                      className="text-blue-600 underline text-sm"
-                    >
-                      View Image
-                    </button>
-                  ) : (
-                    <span className="text-gray-500 italic">None</span>
-                  )}
-                </td>
+
                 <td className="px-4 py-2">
                   <button
                     onClick={() => {
