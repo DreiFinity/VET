@@ -1,269 +1,268 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState } from "react";
 
-const VITE_API_BASE = import.meta.env.VITE_API_BASE;
+const Admin_Announcements = () => {
+  const [openCategory, setOpenCategory] = useState(false);
+  const [openAudience, setOpenAudience] = useState(false);
+  const [openDraft, setOpenDraft] = useState(false);
+  const [category, setCategory] = useState("");
+  const [targetAudience, setTargetAudience] = useState("");
+  const [draft, setDraft] = useState("");
 
-export default function AdminAnnouncements() {
-  const [announcements, setAnnouncements] = useState([]);
-  const [formData, setFormData] = useState({
-    title: "",
-    content: "",
-    category: "",
-    priority: "normal",
-    status: "Draft",
-    targetAudience: "All Users",
-    start_datetime: "",
-    end_datetime: "",
-  });
-  const [editingId, setEditingId] = useState(null);
-  const [search, setSearch] = useState("");
-
-  const targetOptions = [
-    { label: "All Users", value: "All Users" },
-    { label: "Pet Owners", value: "client" },
-    { label: "Clinics", value: "clinic_owner" },
-    { label: "Veterinarians", value: "veterinarian" },
-    { label: "Admins", value: "admin" },
+  const categories = [
+    "General",
+    "Maintenance",
+    "New Feature",
+    "Policy Update",
+    "Event",
   ];
-
-  const fetchAnnouncements = async () => {
-    try {
-      const res = await axios.get(`${VITE_API_BASE}/api/announcements`);
-      setAnnouncements(res.data);
-    } catch (err) {
-      console.error("❌ Error fetching announcements:", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchAnnouncements();
-  }, []);
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (editingId) {
-        await axios.put(
-          `${VITE_API_BASE}/api/announcements/${editingId}`,
-          formData
-        );
-        alert("✅ Announcement updated!");
-      } else {
-        await axios.post(`${VITE_API_BASE}/api/announcements`, formData);
-        alert("✅ Announcement created!");
-      }
-      setFormData({
-        title: "",
-        content: "",
-        category: "",
-        priority: "normal",
-        status: "Draft",
-        targetAudience: "All Users",
-        start_datetime: "",
-        end_datetime: "",
-      });
-      setEditingId(null);
-      fetchAnnouncements();
-    } catch (err) {
-      console.error(err);
-      alert("❌ Failed to save announcement");
-    }
-  };
-
-  const handleEdit = (a) => {
-    setFormData({
-      title: a.title,
-      content: a.content,
-      category: a.category,
-      priority: a.priority,
-      status: a.status,
-      targetAudience: a.targetAudience || "All Users",
-      start_datetime: a.start_datetime?.slice(0, 16) || "",
-      end_datetime: a.end_datetime?.slice(0, 16) || "",
-    });
-    setEditingId(a.announcement_id);
-  };
-
-  const handleDelete = async (id) => {
-    if (!confirm("Delete this announcement?")) return;
-    try {
-      await axios.delete(`${VITE_API_BASE}/api/announcements/${id}`);
-      alert("🗑️ Deleted successfully");
-      fetchAnnouncements();
-    } catch (err) {
-      console.error(err);
-      alert("❌ Failed to delete");
-    }
-  };
-
-  const filtered = announcements.filter((a) =>
-    a.title.toLowerCase().includes(search.toLowerCase())
-  );
+  const targetAudiences = ["All Users", "Pet Owners", "Veterinarians"];
+  const drafts = ["Draft", "Published"];
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">📢 Announcements Manager</h1>
+    <div className="bg-[#f6f6f6] shadow-lg w-full max-w-[1100px] mx-auto rounded-xl overflow-hidden border border-gray-300 p-4 sm:p-6">
+      <label className="font-bold justify-start text-2xl mb-10 block">
+        Announcements
+      </label>
 
-      {/* Create / Edit Form */}
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white shadow-md rounded-lg p-4 mb-6 space-y-3"
-      >
-        <h2 className="text-lg font-semibold mb-2">
-          {editingId ? "✏️ Edit Announcement" : "📝 Create New Announcement"}
-        </h2>
+      <div className="bg-white min-h-[500px] p-6 sm:p-8">
+        <label className="font-bold justify-start text-2xl mb-6 block">
+          Create New Announcement
+        </label>
 
-        <div className="grid grid-cols-2 gap-4">
-          <input
-            name="title"
-            placeholder="Title"
-            value={formData.title}
-            onChange={handleChange}
-            className="border p-2 rounded"
-            required
-          />
-          <input
-            name="category"
-            placeholder="Category"
-            value={formData.category}
-            onChange={handleChange}
-            className="border p-2 rounded"
-          />
-        </div>
+        {/* Title + Category */}
+        <div className="flex flex-col sm:flex-row mt-6 gap-6">
+          {/* Title */}
+          <div className="flex flex-col flex-1">
+            <label htmlFor="title" className="mb-1">
+              Title *
+            </label>
+            <input
+              id="title"
+              type="text"
+              placeholder="Enter announcement title"
+              className="w-full h-10 px-4 border-gray-300 border rounded-md"
+            />
+          </div>
 
-        <textarea
-          name="content"
-          placeholder="Content"
-          value={formData.content}
-          onChange={handleChange}
-          className="border p-2 rounded w-full h-24"
-        />
-
-        <div className="grid grid-cols-2 gap-4">
-          <select
-            name="priority"
-            value={formData.priority}
-            onChange={handleChange}
-            className="border p-2 rounded"
-          >
-            <option value="normal">Normal</option>
-            <option value="high">High</option>
-          </select>
-
-          <select
-            name="status"
-            value={formData.status}
-            onChange={handleChange}
-            className="border p-2 rounded"
-          >
-            <option value="Draft">Draft</option>
-            <option value="Published">Published</option>
-          </select>
-        </div>
-
-        <select
-          name="targetAudience"
-          value={formData.targetAudience}
-          onChange={handleChange}
-          className="border p-2 rounded w-full"
-        >
-          {targetOptions.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
-
-        <div className="grid grid-cols-2 gap-4">
-          <input
-            type="datetime-local"
-            name="start_datetime"
-            value={formData.start_datetime}
-            onChange={handleChange}
-            className="border p-2 rounded"
-          />
-          <input
-            type="datetime-local"
-            name="end_datetime"
-            value={formData.end_datetime}
-            onChange={handleChange}
-            className="border p-2 rounded"
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          {editingId ? "Update Announcement" : "Create Announcement"}
-        </button>
-      </form>
-
-      {/* Search */}
-      <input
-        placeholder="🔍 Search by title..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="border p-2 rounded w-full mb-4"
-      />
-
-      {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white rounded-lg shadow">
-          <thead>
-            <tr className="bg-gray-100 text-left">
-              <th className="p-3">Title</th>
-              <th className="p-3">Category</th>
-              <th className="p-3">Target</th>
-              <th className="p-3">Priority</th>
-              <th className="p-3">Status</th>
-              <th className="p-3">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.length > 0 ? (
-              filtered.map((a) => (
-                <tr key={a.announcement_id} className="border-t">
-                  <td className="p-3">{a.title}</td>
-                  <td className="p-3">{a.category}</td>
-                  <td className="p-3">
-                    {a.target_role_id === null ? "All Users" : a.target_role_id}
-                  </td>
-                  <td className="p-3">{a.priority}</td>
-                  <td className="p-3">{a.status}</td>
-                  <td className="p-3 space-x-2">
-                    <button
-                      onClick={() => handleEdit(a)}
-                      className="text-blue-600 hover:underline"
+          {/* Category Dropdown */}
+          <div className="flex flex-col w-full sm:w-64 relative">
+            <label className="mb-1">Category</label>
+            <button
+              type="button"
+              onClick={() => setOpenCategory(!openCategory)}
+              className="flex items-center justify-between w-full px-3 py-2 border border-gray-400 rounded-md shadow-sm bg-white text-sm font-medium"
+            >
+              <span>{category || "Select category..."}</span>
+              <img src="/dropdown.png" alt="Dropdown" className="w-3 sm:w-4" />
+            </button>
+            {openCategory && (
+              <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-md z-10">
+                <ul className="py-1 text-sm">
+                  {categories.map((c, i) => (
+                    <li
+                      key={i}
+                      onClick={() => {
+                        setCategory(c);
+                        setOpenCategory(false);
+                      }}
+                      className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
                     >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(a.announcement_id)}
-                      className="text-red-600 hover:underline"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td className="p-3 text-center" colSpan="6">
-                  No announcements found.
-                </td>
-              </tr>
+                      {c}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             )}
-          </tbody>
-        </table>
+          </div>
+        </div>
+
+        {/* Content */}
+        <div>
+          <textarea
+            placeholder="Enter your announcement content here..."
+            className="w-full h-64 p-4 border border-gray-300 rounded-md mt-6 text-left align-top resize-none"
+          />
+        </div>
+
+        {/* Start & End Date */}
+        <div className="flex flex-col sm:flex-row gap-6 mt-6">
+          <div className="flex flex-col w-full">
+            <label htmlFor="startDate" className="mb-1 font-medium">
+              Start Date & Time
+            </label>
+            <input
+              id="startDate"
+              type="datetime-local"
+              className="w-full border border-gray-300 rounded-md px-3 py-2"
+            />
+          </div>
+          <div className="flex flex-col w-full">
+            <label htmlFor="endDate" className="mb-1 font-medium">
+              End Date & Time
+            </label>
+            <input
+              id="endDate"
+              type="datetime-local"
+              className="w-full border border-gray-300 rounded-md px-3 py-2"
+            />
+          </div>
+        </div>
+
+        {/* Priority */}
+        <div className="flex flex-col mt-6">
+          <label className="font-medium mb-2">Priority Level</label>
+          <div className="flex flex-wrap gap-4">
+            {["Low", "Medium", "High"].map((p) => (
+              <label key={p} className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  name="priority"
+                  value={p.toLowerCase()}
+                  className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                />
+                <span>{p}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        {/* Target Audience & Status */}
+        <div className="flex flex-col sm:flex-row mt-6 gap-6 border-b border-gray-300 pb-10 mb-10">
+          {/* Target Audience Dropdown */}
+          <div className="flex flex-col relative w-full sm:w-64">
+            <label className="mb-1">Target Audience</label>
+            <button
+              type="button"
+              onClick={() => setOpenAudience(!openAudience)}
+              className="flex items-center justify-between w-full px-3 py-2 border border-gray-400 rounded-md shadow-sm bg-white text-sm font-medium"
+            >
+              <span>{targetAudience || "Select audience..."}</span>
+              <img src="/dropdown.png" alt="Dropdown" className="w-3 sm:w-4" />
+            </button>
+            {openAudience && (
+              <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-md z-10">
+                <ul className="py-1 text-sm">
+                  {targetAudiences.map((aud, i) => (
+                    <li
+                      key={i}
+                      onClick={() => {
+                        setTargetAudience(aud);
+                        setOpenAudience(false);
+                      }}
+                      className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                    >
+                      {aud}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+
+          {/* Status Dropdown */}
+          <div className="flex flex-col relative w-full sm:w-64">
+            <label className="mb-1">Status</label>
+            <button
+              type="button"
+              onClick={() => setOpenDraft(!openDraft)}
+              className="flex items-center justify-between w-full px-3 py-2 border border-gray-400 rounded-md shadow-sm bg-white text-sm font-medium"
+            >
+              <span>{draft || "Select status..."}</span>
+              <img src="/dropdown.png" alt="Dropdown" className="w-3 sm:w-4" />
+            </button>
+            {openDraft && (
+              <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-md z-10">
+                <ul className="py-1 text-sm">
+                  {drafts.map((d, i) => (
+                    <li
+                      key={i}
+                      onClick={() => {
+                        setDraft(d);
+                        setOpenDraft(false);
+                      }}
+                      className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                    >
+                      {d}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-0 sm:justify-end items-center sm:space-x-4">
+          <button className="w-full sm:w-20 h-10 bg-gray-500 px-4 py-2 rounded-md text-white">
+            Clear
+          </button>
+          <button className="w-full sm:w-48 h-10 bg-blue-500 px-4 py-2 rounded-md text-white">
+            Publish Announcement
+          </button>
+        </div>
+      </div>
+
+      {/* Recent Announcements */}
+      <div className="bg-white min-h-[400px] p-6 sm:p-8 mt-10">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 border-b border-gray-300 pb-8 gap-4">
+          <div>
+            <label className="font-medium text-xl">Recent Announcements</label>
+          </div>
+          <div className="relative w-full sm:w-80">
+            <input
+              type="text"
+              className="bg-white border border-gray-300 pl-5 pr-2 py-2 rounded-md w-full"
+              placeholder="Search announcements..."
+            />
+            <img
+              src="/search.png"
+              alt="Search Icon"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5"
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-col sm:flex-row w-full justify-between gap-6">
+          <div className="flex flex-col flex-1">
+            <div className="flex flex-row justify-between items-center w-full">
+              <label className="font-medium text-lg">
+                System Maintenance Scheduled
+              </label>
+            </div>
+
+            <div className="flex flex-wrap gap-3 mt-2 items-center">
+              <label>Jan 15,2025 - 10:30AM</label>
+              <button className="bg-red-300 px-3 py-2 text-sm rounded-full">
+                HIGH
+              </button>
+              <button className="bg-gray-300 px-3 py-2 text-sm rounded-full">
+                Scheduled
+              </button>
+              <label className="text-sm">General - All Users</label>
+            </div>
+
+            <div className="mt-2">
+              <label>
+                We will be performing scheduled maintenance on our servers from
+                2:00AM to 4:00AM EST. During this time, some services may be
+                temporarily unavailable.
+              </label>
+            </div>
+          </div>
+
+          {/* Right side buttons */}
+          <div className="flex flex-row sm:flex-row gap-3 sm:space-x-0 sm:space-y-3">
+            <button className="bg-gray-500 px-4 py-2 text-sm w-full sm:w-28 h-10 rounded-full text-white">
+              Edit
+            </button>
+            <button className="bg-red-500 px-4 py-2 text-sm w-full sm:w-28 h-10 rounded-full text-white">
+              Delete
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
-}
+};
+
+export default Admin_Announcements;

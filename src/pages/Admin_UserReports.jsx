@@ -150,6 +150,15 @@ const Admin_UserReports = () => {
                 >
                   Clinic Owners
                 </li>
+                <li
+                  className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                  onClick={() => {
+                    setSelectedRole("veterinarian");
+                    setOpen(false);
+                  }}
+                >
+                  Veterinaries
+                </li>
               </ul>
             </div>
           )}
