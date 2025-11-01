@@ -88,13 +88,14 @@ const Admin_UserReports = () => {
 
     if (Array.isArray(image)) {
       parsedImage = image;
-    } else if (typeof image === "string" && image.trim() !== "") {
+    } else if (typeof image === "string" && image.startsWith("[")) {
       try {
-        const temp = JSON.parse(image);
-        parsedImage = Array.isArray(temp) ? temp : [temp];
-      } catch {
-        parsedImage = [image]; // fallback if JSON.parse fails
+        parsedImage = JSON.parse(image);
+      } catch (err) {
+        console.error("Failed to parse evidence_image:", err);
       }
+    } else if (image) {
+      parsedImage = [image];
     }
 
     setModalContent({ text, image: parsedImage });
