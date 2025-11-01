@@ -117,7 +117,7 @@ const Admin_BannedFreelance = () => {
               <th className="px-4 py-2">Specialization</th>
               <th className="px-4 py-2">Department</th>
               <th className="px-4 py-2">Email</th>
-              <th className="px-4 py-2">Ban Reason</th>
+              <th className="px-4 py-2">Employment Type</th>
               <th className="px-4 py-2">Evidence</th>
               <th className="px-4 py-2">Action</th>
             </tr>
@@ -132,6 +132,7 @@ const Admin_BannedFreelance = () => {
                 <td className="px-4 py-2">{vet.specialization}</td>
                 <td className="px-4 py-2">{vet.department}</td>
                 <td className="px-4 py-2">{vet.email}</td>
+                <td className="px-4 py-2">{vet.employment_type}</td>
                 <td className="px-4 py-2">
                   <button
                     onClick={() => setSelectedVetForReason(vet)}
