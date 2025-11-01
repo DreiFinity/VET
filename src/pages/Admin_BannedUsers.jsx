@@ -108,7 +108,7 @@ const Admin_BannedUsers = () => {
                     setOpen(false);
                   }}
                 >
-                  Veterinaries
+                  Clinics
                 </li>
                 <li
                   className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
@@ -117,7 +117,7 @@ const Admin_BannedUsers = () => {
                     setOpen(false);
                   }}
                 >
-                  Freelance Vets
+                  Veterinarians
                 </li>
               </ul>
             </div>

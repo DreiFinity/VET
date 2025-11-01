@@ -130,7 +130,7 @@ const Admin_Veterinaries = () => {
                     setOpen(false); // close the dropdown
                   }}
                 >
-                  Freelance Vets
+                  Veterinarians
                 </li>
               </ul>
             </div>

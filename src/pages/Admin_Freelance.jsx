@@ -110,7 +110,7 @@ const Admin_Freelance = () => {
                     setOpen(false);
                   }}
                 >
-                  Veterinaries
+                  Clinics
                 </li>
               </ul>
             </div>

@@ -131,7 +131,7 @@ const Admin_PetOwners = () => {
                     setOpen(false); // close the dropdown
                   }}
                 >
-                  Veterinaries
+                  Clinics
                 </li>
                 <li
                   className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
@@ -140,7 +140,7 @@ const Admin_PetOwners = () => {
                     setOpen(false); // close the dropdown
                   }}
                 >
-                  Freelance Vets
+                  Veterinarians
                 </li>
               </ul>
             </div>

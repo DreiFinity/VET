@@ -100,7 +100,7 @@ const Admin_BannedFreelance = () => {
                     setOpen(false);
                   }}
                 >
-                  Veterinaries
+                  Clinics
                 </li>
               </ul>
             </div>

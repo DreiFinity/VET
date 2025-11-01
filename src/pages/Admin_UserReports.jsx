@@ -162,7 +162,7 @@ const Admin_UserReports = () => {
                     setOpen(false);
                   }}
                 >
-                  Clinic Owners
+                  Clinics
                 </li>
                 <li
                   className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
