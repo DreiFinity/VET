@@ -122,7 +122,15 @@ const Admin_UserReports = () => {
             className="flex items-center justify-between w-36 sm:w-40 px-3 py-1 border border-gray-400 rounded-md shadow-sm bg-white text-xs sm:text-sm font-medium"
           >
             <span>
-              {selectedRole === "client" ? "Pet Owners" : "Clinic Owners"}
+              <span>
+                {selectedRole === "client"
+                  ? "Pet Owners"
+                  : selectedRole === "clinic_owner"
+                  ? "Clinic Owners"
+                  : selectedRole === "veterinarian"
+                  ? "Veterinarians"
+                  : "Unknown Role"}
+              </span>
             </span>
             <span>
               <img src="./dropdown.png" alt="Dropdown" className="w-3 sm:w-4" />
