@@ -33,6 +33,7 @@ import UpcomingAppointment from "./components/UpcomingAppointment";
 import Navbar from "./components/Navbar";
 import Admin_FreelanceVets from "./pages/Admin_Freelance";
 import Admin_BannedFreelance from "./pages/Admin_BannedFreelance";
+import Admin_VeterinarianBilling from "./pages/Admin_VeterinarianBilling";
 
 function App() {
   return (
@@ -132,6 +133,14 @@ function App() {
           element={
             <AdminLayout>
               <Billing />
+            </AdminLayout>
+          }
+        />
+        <Route
+          path="/admin_veterinarian_billing"
+          element={
+            <AdminLayout>
+              <Admin_VeterinarianBilling />
             </AdminLayout>
           }
         />
