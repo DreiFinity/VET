@@ -109,11 +109,20 @@ const Admin_VeterinarianBilling = () => {
           )}
         </div>
 
-        {/* 📊 Stats */}
+        {/* Stats Cards */}
         <div className="flex space-x-4 sm:space-x-6 justify-center">
           <div className="bg-gray-300 px-3 sm:px-4 py-2 w-32 sm:w-40 rounded-[16px] sm:rounded-[20px] text-center">
-            <h2 className="text-lg sm:text-xl font-bold">{stats.vetsCount}</h2>
-            <p className="text-sm sm:text-lg">Veterinarians</p>
+            <h2 className="text-lg sm:text-xl font-bold">
+              {stats.petOwnersCount}
+            </h2>
+            <p className="text-sm sm:text-lg">PetOwners</p>
+          </div>
+
+          <div className="bg-gray-300 px-3 sm:px-4 py-2 w-32 sm:w-40 rounded-[16px] sm:rounded-[20px] text-center">
+            <h2 className="text-lg sm:text-xl font-bold">
+              {stats.clinicsCount}
+            </h2>
+            <p className="text-sm sm:text-lg">Clinics</p>
           </div>
         </div>
       </div>
@@ -128,12 +137,12 @@ const Admin_VeterinarianBilling = () => {
               <th className="px-4 py-2 font-regular">Email</th>
               <th className="px-4 py-2 font-regular">Specialization</th>
               <th className="px-4 py-2 font-regular">Employment Type</th>
-              <th className="px-4 py-2 font-regular">Department</th>
+
               <th className="px-4 py-2 font-regular">Contact</th>
               <th className="px-4 py-2 font-regular">Plan</th>
               <th className="px-4 py-2 font-regular">Price</th>
               <th className="px-4 py-2 font-regular">Start Date</th>
-              <th className="px-4 py-2 font-regular">End Date</th>
+              <th className="px-4 py-2 font-regular">Next Billing</th>
               <th className="px-4 py-2 font-regular">Status</th>
             </tr>
           </thead>
@@ -145,11 +154,11 @@ const Admin_VeterinarianBilling = () => {
                 className={index % 2 === 0 ? "bg-[#D9D9D9]" : "bg-white"}
               >
                 <td className="px-4 py-2">{bill.vet_id}</td>
-                <td className="px-4 py-2">{bill.vet_name}</td>
+                <td className="px-4 py-2">{bill.name}</td>
                 <td className="px-4 py-2">{bill.email}</td>
                 <td className="px-4 py-2">{bill.specialization}</td>
                 <td className="px-4 py-2">{bill.employment_type}</td>
-                <td className="px-4 py-2">{bill.department}</td>
+
                 <td className="px-4 py-2">{bill.contact_number}</td>
                 <td className="px-4 py-2">{bill.plan_name}</td>
                 <td className="px-4 py-2">{bill.price}</td>
