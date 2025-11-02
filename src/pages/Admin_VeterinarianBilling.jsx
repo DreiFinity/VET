@@ -9,7 +9,10 @@ const Admin_VeterinarianBilling = () => {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [billings, setBillings] = useState([]);
-  const [stats, setStats] = useState({ vetsCount: 0 });
+  const [stats, setStats] = useState({
+    petOwnersCount: 0,
+    clinicsCount: 0,
+  });
 
   // 🧠 Fetch veterinarian billing data
   useEffect(() => {
@@ -29,7 +32,8 @@ const Admin_VeterinarianBilling = () => {
         const res = await axios.get(`${VITE_API_BASE1}/api/stats`);
         // adjust based on what your stats API returns
         setStats({
-          vetsCount: res.data?.veterinariansCount || 0,
+          petOwnersCount: res.data.petOwnersCount || 0,
+          clinicsCount: res.data.clinicsCount || 0,
         });
       } catch (err) {
         console.error("Error fetching stats:", err);
